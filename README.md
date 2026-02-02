@@ -68,32 +68,26 @@ chmod +x hy2.sh
 ### 交互式菜单
 
 ```
-    ╦ ╦╦ ╦╔═╗╔╦╗╔═╗╦═╗╦╔═╗  ╔═╗
-    ╠═╣╚╦╝╚═╗ ║ ║╣ ╠╦╝║╠═╣  ╔═╝
-    ╩ ╩ ╩ ╚═╝ ╩ ╚═╝╩╚═╩╩ ╩  ╚═╝
-
-  1. 安装 Hysteria 2 (自签名证书)
-  2. 安装 Hysteria 2 (ACME 证书)
-  3. 查看配置信息
-  4. 更新 Hysteria 2
-  5. 重启服务
-  6. 查看状态
-  7. 查看日志
-  8. 卸载 Hysteria 2
+  1. 安装 Hysteria 2
+  2. 切换证书模式
+  3. 修改配置
+  4. 更新核心
+  5. 查看配置
+  6. 查看日志
+  7. 卸载
   0. 退出
 ```
 
 ### 命令行模式
 
 ```bash
-./install.sh install       # 安装 (自签名)
-./install.sh install-acme  # 安装 (ACME证书)
-./install.sh update        # 更新
-./install.sh config        # 查看配置
-./install.sh status        # 服务状态
-./install.sh restart       # 重启服务
-./install.sh logs          # 查看日志
-./install.sh uninstall     # 卸载
+./install.sh install    # 安装
+./install.sh update     # 更新核心
+./install.sh modify     # 修改配置
+./install.sh switch     # 切换证书模式
+./install.sh config     # 查看配置
+./install.sh logs       # 查看日志
+./install.sh uninstall  # 卸载
 ```
 
 ---

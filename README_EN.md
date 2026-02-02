@@ -68,32 +68,26 @@ chmod +x hy2.sh
 ### Interactive Menu
 
 ```
-    ╦ ╦╦ ╦╔═╗╔╦╗╔═╗╦═╗╦╔═╗  ╔═╗
-    ╠═╣╚╦╝╚═╗ ║ ║╣ ╠╦╝║╠═╣  ╔═╝
-    ╩ ╩ ╩ ╚═╝ ╩ ╚═╝╩╚═╩╩ ╩  ╚═╝
-
-  1. Install Hysteria 2 (Self-signed Cert)
-  2. Install Hysteria 2 (ACME Cert)
-  3. Show Config
-  4. Update Hysteria 2
-  5. Restart Service
-  6. Service Status
-  7. View Logs
-  8. Uninstall Hysteria 2
+  1. Install Hysteria 2
+  2. Switch Cert Mode
+  3. Modify Config
+  4. Update Core
+  5. Show Config
+  6. View Logs
+  7. Uninstall
   0. Exit
 ```
 
 ### Command Line Mode
 
 ```bash
-./install.sh install       # Install (self-signed)
-./install.sh install-acme  # Install (ACME cert)
-./install.sh update        # Update
-./install.sh config        # Show config
-./install.sh status        # Service status
-./install.sh restart       # Restart service
-./install.sh logs          # View logs
-./install.sh uninstall     # Uninstall
+./install.sh install    # Install
+./install.sh update     # Update core
+./install.sh modify     # Modify config
+./install.sh switch     # Switch cert mode
+./install.sh config     # Show config
+./install.sh logs       # View logs
+./install.sh uninstall  # Uninstall
 ```
 
 ---
