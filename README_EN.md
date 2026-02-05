@@ -9,9 +9,9 @@
 [![Platform](https://img.shields.io/badge/platform-Linux-lightgrey.svg?style=flat-square)](https://github.com/apernet/hysteria)
 [![Hysteria](https://img.shields.io/badge/Hysteria-2.x-purple.svg?style=flat-square)](https://hysteria.network/)
 
-**Deploy Hysteria 2 Proxy Server in One Click**
+**Deployment & Management Script for Hysteria 2 Proxy**
 
-*Supports Debian 11+ / Ubuntu 20.04+ / CentOS 7+ / More Distros*
+*Supports Debian 11+ / Ubuntu 20.04+ / CentOS 7+ / AlmaLinux / Rocky Linux*
 
 </div>
 
@@ -19,13 +19,14 @@
 
 ## ✨ Features
 
-- 🚀 **One-Click Install** - Automatic configuration
-- 🔐 **Certificate Support** - Self-signed / Let's Encrypt ACME
-- 🔄 **Online Update** - Upgrade to latest version instantly
-- 📱 **Auto Generate** - Client config + Share link
-- 🛡️ **Firewall Config** - Auto allow ports (UFW/firewalld/iptables)
-- 📊 **Logging** - Complete installation logs
-- 🌍 **Multi-Distro** - Debian/Ubuntu/CentOS/Rocky/Alma/Arch etc.
+- 🚀 **One-Click Install** - Auto-install dependencies, setup core and service
+- ⚡ **Network Optimization** - Auto-configure TCP BBR + FQ and UDP buffer (sysctl)
+- 🦗 **Port Hopping** - Support Port Hopping (via iptables/DNAT) to resist blocking
+- 🛡️ **Security** - Support Obfuscation passwords to prevent protocol detection
+- 📱 **Multi-Client Config** - Auto-generate configs for **Clash Meta**, **Sing-box** and official client
+- 🌍 **Mirror Support** - Integrated GitHub mirrors (ghproxy etc.) for fast download in China
+- 🔒 **Cert Mode** - Support Self-signed Certificate or Custom Certificate
+- 📊 **Port Check** - Smart port detection & Auto firewall configuration (UFW/firewalld/iptables)
 
 ---
 
@@ -54,7 +55,7 @@ bash <(curl -fsSL https://raw.githubusercontent.com/KyBronte/hysteria2/main/inst
 # Download script
 wget -O hy2.sh https://raw.githubusercontent.com/KyBronte/hysteria2/main/install.sh
 
-# Add permission
+# Make executable
 chmod +x hy2.sh
 
 # Run
@@ -67,28 +68,62 @@ chmod +x hy2.sh
 
 ### Interactive Menu
 
-```
+Run the script without arguments to open the menu:
+
+```text
   1. Install Hysteria 2
-  2. Switch Cert Mode
-  3. Modify Config
-  4. Update Core
-  5. Show Config
-  6. View Logs
-  7. Uninstall
+  2. View Config (Share Link / QR Code)
+  3. Modify Config (Port/Password/SNI/Obfs)
+  4. Service Management (Start/Stop/Restart)
+  5. Switch Cert Mode
+  6. Update Core
+  7. View Logs
+  8. View Port Usage (Check port conflicts/hopping rules)
+  9. Change to Chinese
+  10. Uninstall
   0. Exit
 ```
 
 ### Command Line Mode
 
+The script supports headless mode for batch deployment:
+
 ```bash
-./install.sh install    # Install
+# Full installation example
+./install.sh install \
+    --port 443 \
+    --password "mypassword" \
+    --sni "www.bing.com" \
+    --obfs "obfs_password" \
+    --headless
+
+# Common commands
 ./install.sh update     # Update core
-./install.sh modify     # Modify config
-./install.sh switch     # Switch cert mode
-./install.sh config     # Show config
-./install.sh logs       # View logs
+./install.sh config     # View config info
+./install.sh logs       # View runtime logs
 ./install.sh uninstall  # Uninstall
 ```
+
+---
+
+## 💡 Advanced Features
+
+### 🦗 Port Hopping
+The script supports **Port Hopping**. It uses iptables DNAT rules to forward traffic from a port range (e.g., 20000-30000) to the Hysteria 2 listening port.
+- **Benefit**: Significantly improves connection survival rate when the main port is blocked by firewalls.
+- **Setup**: Select "Port Hopping" mode during installation or check active rules after install.
+
+### ⚡ Network Optimization
+The installer automatically applies the following optimizations to `/etc/sysctl.d/99-hysteria.conf`:
+- `net.core.rmem_max` / `net.core.wmem_max`: Increase UDP buffer to 16MB.
+- `net.ipv4.tcp_congestion_control`: Enable **BBR**.
+- `net.core.default_qdisc`: Enable **FQ**.
+
+### 📱 Auto-Generate Client Configs
+After installation, client configurations are generated in `/etc/hysteria/configs/`:
+- `clash-meta.yaml`: Config for Clash Meta (Mihomo).
+- `sing-box.json`: Outbound config for Sing-box.
+- `hy-client.yaml` / `hy-client.json`: Official client configs.
 
 ---
 
@@ -98,25 +133,9 @@ chmod +x hy2.sh
 |------|------|
 | Binary | `/usr/local/bin/hysteria` |
 | Server Config | `/etc/hysteria/config.yaml` |
-| Client Config | `/etc/hysteria/client.yaml` |
-| Certificates | `/etc/hysteria/certs/` |
-| Install Log | `/var/log/hysteria-install.log` |
-
----
-
-## 🔧 Common Commands
-
-```bash
-# Service Management
-systemctl start hysteria-server    # Start
-systemctl stop hysteria-server     # Stop
-systemctl restart hysteria-server  # Restart
-systemctl status hysteria-server   # Status
-
-# View Logs
-journalctl -u hysteria-server -f      # Real-time logs
-journalctl -u hysteria-server -n 100  # Last 100 lines
-```
+| Cert/Key | `/etc/hysteria/certs/` |
+| **Client Configs** | `/etc/hysteria/configs/` |
+| Sysctl Params | `/etc/sysctl.d/99-hysteria.conf` |
 
 ---
 
@@ -124,10 +143,10 @@ journalctl -u hysteria-server -n 100  # Last 100 lines
 
 | Platform | Client |
 |----------|--------|
-| **Windows** | [v2rayN](https://github.com/2dust/v2rayN) / [NekoRay](https://github.com/MatsuriDayo/nekoray) |
-| **macOS** | [V2RayXS](https://github.com/tzmax/V2RayXS) / [NekoRay](https://github.com/MatsuriDayo/nekoray) |
-| **Linux** | [NekoRay](https://github.com/MatsuriDayo/nekoray) |
-| **Android** | [NekoBox](https://github.com/MatsuriDayo/NekoBoxForAndroid) / [Surfboard](https://getsurfboard.com/) |
+| **Windows** | [v2rayN](https://github.com/2dust/v2rayN) (requires Hysteria2 Core) / [NekoRay](https://github.com/MatsuriDayo/nekoray) |
+| **macOS** | [Sing-box](https://github.com/SagerNet/sing-box) / [NekoRay](https://github.com/MatsuriDayo/nekoray) |
+| **Linux** | [NekoRay](https://github.com/MatsuriDayo/nekoray) / [Hysteria Official](https://github.com/apernet/hysteria) |
+| **Android** | [NekoBox](https://github.com/MatsuriDayo/NekoBoxForAndroid) / [Sing-box](https://github.com/SagerNet/sing-box) |
 | **iOS** | [Shadowrocket](https://apps.apple.com/app/shadowrocket/id932747118) / [Stash](https://apps.apple.com/app/stash/id1596063349) |
 
 ---
@@ -135,13 +154,13 @@ journalctl -u hysteria-server -n 100  # Last 100 lines
 ## ⚠️ Notes
 
 > [!IMPORTANT]
-> Make sure your server firewall/security group allows the **UDP port**
+> **Self-Signed Cert**: The script defaults to using a Self-Signed Certificate. You **MUST** enable `insecure` (Skip Certificate Verification) in your client options.
 
 > [!TIP]
-> When using self-signed certificate, enable `insecure` option in client
+> **Firewall**: The script automatically opens ports in `ufw` / `firewalld` / `iptables`. If using a Cloud Provider (AWS, Alibaba Cloud, etc.), ensure the **UDP Port** is allowed in the Security Group console.
 
 > [!NOTE]
-> ACME certificate requires domain pointing to server IP with port 80 available
+> **Port Hopping**: Requires kernel support for iptables/netfilter, which is available on almost all VPS.
 
 ---
 
@@ -153,8 +172,8 @@ journalctl -u hysteria-server -n 100  # Last 100 lines
 
 ## 🙏 Credits
 
-- [Hysteria](https://github.com/apernet/hysteria) - Core proxy program
+- [Hysteria](https://github.com/apernet/hysteria) - Core Protocol
 
 <div align="center">
-<sub>Made with ❤️</sub>
+<sub>Made with ❤️ by KyBronte</sub>
 </div>
