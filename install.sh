@@ -1,11 +1,9 @@
 #!/bin/bash
 # Hysteria 2 一键安装脚本 | Hysteria 2 One-Click Installer
 # 版本 | Version: 2.1.0
-# 支持 | Support: Debian 11+ / Ubuntu 20.04+ / CentOS 7+
+# 支持 | Support: Debian 11+ / Ubuntu 20.04+ / CentOS 7+ / AlmaLinux / Rocky Linux
 # GitHub: https://github.com/KyBronte/hysteria2
 
-# 不使用 set -e，避免 systemctl status 等返回非0时退出菜单
-# set -e
 
 # ==================== 全局变量 ====================
 export LC_ALL=C
